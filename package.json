@@ -9,13 +9,15 @@
     "type": "git",
     "url": "git://github.com/benbjohnson/thesecretlivesofdata.git"
   },
-  "dependencies": {},
   "devDependencies": {
-    "mocha-phantomjs": "3.1.2",
+    "@playwright/test": "^1.59.1",
     "jslint": "0.1.9",
+    "mocha-phantomjs": "3.1.2",
     "uglify-js": ">= 1.3.4"
   },
   "scripts": {
-    "test": "make test"
+    "test": "make test",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   }
 }
