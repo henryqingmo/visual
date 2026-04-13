@@ -10,6 +10,8 @@ define([], function () {
         this._kind = "process";
         this._mutexState = "idle";
         this._nameVisible = true;
+        this._lamportT = 0;
+        this._requestQueue = [];
     }
 
     Node.prototype = new playback.DataObject();
@@ -60,6 +62,10 @@ define([], function () {
         clone._kind = this._kind;
         clone._mutexState = this._mutexState;
         clone._nameVisible = this._nameVisible;
+        clone._lamportT = this._lamportT;
+        clone._requestQueue = this._requestQueue.map(function (e) {
+            return { t: e.t, from: e.from };
+        });
         return clone;
     };
 

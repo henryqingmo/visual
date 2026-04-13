@@ -25,6 +25,7 @@ define(["./controls", "./message", "./node"], function (Controls, Message, Node)
         this.leaderQueue = [];
         this.tokenLocation = null;
         this.ringOrder = ["p1", "p2", "p3"];
+        this.raOrder = ["p1", "p2", "p3"];
     }
 
     Model.prototype = new playback.Model();
@@ -118,6 +119,7 @@ define(["./controls", "./message", "./node"], function (Controls, Message, Node)
         this.leaderQueue = [];
         this.tokenLocation = null;
         this.ringOrder = ["p1", "p2", "p3"];
+        this.raOrder = ["p1", "p2", "p3"];
     };
 
     Model.prototype.ringSuccessor = function (id) {
@@ -145,6 +147,7 @@ define(["./controls", "./message", "./node"], function (Controls, Message, Node)
         clone.leaderQueue = this.leaderQueue.slice();
         clone.tokenLocation = this.tokenLocation;
         clone.ringOrder = this.ringOrder.slice();
+        clone.raOrder = this.raOrder.slice();
         for (key in this.latencies) {
             if (this.latencies.hasOwnProperty(key)) {
                 clone.latencies[key] = this.latencies[key];

@@ -120,8 +120,12 @@ define([], function () {
                         return "translate(" + self.parent().scales.x(d.x) + "," + self.parent().scales.y(d.y) + ")";
                     },
                     fill = function (d) {
-                        if (d.mutexState() === "critical") {
+                        var s = d.mutexState();
+                        if (s === "critical" || s === "held") {
                             return "#1b5e20";
+                        }
+                        if (s === "wanted" || s === "waiting") {
+                            return "#e65100";
                         }
                         if (d.kind() === "leader") {
                             return "#1565c0";
@@ -129,7 +133,8 @@ define([], function () {
                         return "steelblue";
                     },
                     strokeDash = function (d) {
-                        return (d.mutexState() === "waiting" ? "4,3" : "");
+                        var s = d.mutexState();
+                        return (s === "waiting" || s === "wanted" ? "4,3" : "");
                     };
 
                 var g = this.enter().append("g")
@@ -172,8 +177,9 @@ define([], function () {
                     })
                     .style("stroke-dasharray", strokeDash)
                     .style("stroke-width", function (d) {
-                        var pr = self.pixelRadiusForNode(d);
-                        return d.mutexState() === "waiting"
+                        var pr = self.pixelRadiusForNode(d),
+                            s = d.mutexState();
+                        return (s === "waiting" || s === "wanted")
                             ? Math.max(2, Math.min(4, pr * 0.11))
                             : Math.max(2, Math.min(4, pr * 0.13));
                     })
@@ -189,6 +195,9 @@ define([], function () {
                     })
                     .style("opacity", function (d) {
                         var loc = model.tokenLocation;
+                        if (model.layoutMode === "ra") {
+                            return 0;
+                        }
                         if (loc === "L" && d.kind() === "leader") {
                             return 0.95;
                         }
@@ -224,6 +233,14 @@ define([], function () {
                                 return self.displayLabel({ id: pid, kind: function () { return "process"; } });
                             });
                             desc.push("queue: " + (q.length ? q.join(", ") : "∅"));
+                        } else if (model.layoutMode === "ra") {
+                            desc.push(node.mutexState());
+                            desc.push("T=" + node._lamportT);
+                            if (node._requestQueue && node._requestQueue.length > 0) {
+                                desc.push("defer " + node._requestQueue.map(function (req) {
+                                    return "⟨" + req.t + "," + req.from.replace(/^p/, "") + "⟩";
+                                }).join(" "));
+                            }
                         } else {
                             desc.push(node.mutexState());
                         }
@@ -289,6 +306,18 @@ define([], function () {
                 node = procs[i];
                 node.x = x + (w / 2) + ((i - (procs.length - 1) / 2) * (w * 0.28));
                 node.y = y + (h * 0.72);
+                node.ypos = "bottom";
+            }
+        } else if (model.layoutMode === "ra") {
+            order = model.raOrder;
+            nodes.sort(function (a, b) {
+                return order.indexOf(a.id) - order.indexOf(b.id);
+            });
+            for (i = 0; i < nodes.length; i += 1) {
+                node = nodes[i];
+                node.x = x + (w / 2) + ((i - (nodes.length - 1) / 2) * (w * 0.26));
+                node.y = y + (h * 0.52);
+                node.r = RADIUS;
                 node.ypos = "bottom";
             }
         } else {

@@ -14,12 +14,12 @@ define([], function () {
         })
             .after(500, function () {
                 frame.model().title = '<h1 style="visibility:visible">Distributed Mutual Exclusion</h1>'
-                    + '<h2 style="visibility:visible">Central server and token ring</h2>'
+                    + '<h2 style="visibility:visible">Central server, token ring, and Ricart–Agrawala</h2>'
                     + '<br/>' + frame.model().controls.html();
                 layout.invalidate();
             })
             .after(500, function () {
-                frame.model().subtitle = '<p style="visibility:visible"><em>Two classic algorithms for distributed mutual exclusion.</em></p>';
+                frame.model().subtitle = '<p style="visibility:visible"><em>Classic algorithms for distributed mutual exclusion.</em></p>';
                 layout.invalidate();
                 frame.model().controls.show();
             })

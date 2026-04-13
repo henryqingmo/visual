@@ -19,15 +19,16 @@ define([], function () {
         })
             .after(400, function () {
                 model().title = '<h2>At a glance</h2>'
-                    + '<table class="table" style="max-width:720px;margin:1em auto;text-align:left">'
-                    + '<thead><tr><th></th><th>Central server</th><th>Ring</th></tr></thead><tbody>'
-                    + '<tr><td><strong>enter</strong> traffic</td><td>2 messages (REQUEST + TOKEN)</td><td>0 messages (wait for the token)</td></tr>'
-                    + '<tr><td><strong>exit</strong> traffic</td><td>1 message (return TOKEN)</td><td>1 message (pass to successor)</td></tr>'
-                    + '<tr><td>Client delay</td><td>2 message delays</td><td>0 … N−1 message delays</td></tr>'
-                    + '<tr><td>Sync delay</td><td>2 message delays</td><td>Often 1 hop after release</td></tr>'
-                    + '<tr><td>Failure modes</td><td>Leader is a single point of failure</td><td>Lost token if a process crashes holding it</td></tr>'
+                    + '<table class="table" style="max-width:820px;margin:1em auto;text-align:left;font-size:13px">'
+                    + '<thead><tr><th></th><th>Central server</th><th>Ring</th><th>Ricart–Agrawala</th></tr></thead><tbody>'
+                    + '<tr><td><strong>enter</strong> traffic</td><td>2 msgs</td><td>0 (wait for token)</td><td>2(N−1) (Request + Reply each)</td></tr>'
+                    + '<tr><td><strong>exit</strong> traffic</td><td>1 msg</td><td>1 (pass token)</td><td>Replies to deferred requests</td></tr>'
+                    + '<tr><td>Client delay</td><td>2 msg delays</td><td>0 … N−1</td><td>2(N−1) msg delays (all replies)</td></tr>'
+                    + '<tr><td>Sync delay</td><td>2 msg delays</td><td>Often 1 hop</td><td>As low as 1 msg delay</td></tr>'
+                    + '<tr><td>Structure</td><td>Leader + queue</td><td>Logical ring</td><td>Fully distributed</td></tr>'
+                    + '<tr><td>Failure modes</td><td>Leader crash</td><td>Token loss</td><td>Any crash needs detection</td></tr>'
                     + '</tbody></table>'
-                    + '<p>Both algorithms satisfy mutual exclusion when processes behave correctly; production systems add failure detection, timeouts, and recovery.</p>'
+                    + '<p>These algorithms assume correct processes; real deployments add timeouts, failure detection, and recovery.</p>'
                     + model().controls.html();
                 layout.invalidate();
             })

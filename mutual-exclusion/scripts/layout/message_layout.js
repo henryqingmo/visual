@@ -8,6 +8,8 @@ define([], function () {
         REQ: { color: "#2e7d32", size: 2, opacity: 1 },
         TOK: { color: "#f9a825", size: 2.2, opacity: 1 },
         RTN: { color: "#ef6c00", size: 2, opacity: 1 },
+        RARQ: { color: "#6a1b9a", size: 2.2, opacity: 1 },
+        RARP: { color: "#00695c", size: 2, opacity: 1 },
     };
 
     function MessageLayout(parent) {

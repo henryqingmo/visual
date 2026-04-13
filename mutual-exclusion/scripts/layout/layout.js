@@ -20,7 +20,11 @@ define(["./node_layout", "./message_layout"], function (NodeLayout, MessageLayou
     };
 
     Layout.prototype.invalidate = function () {
-        var nw = NodeLayout.WIDTH;
+        var nw = NodeLayout.WIDTH,
+            model = this.model();
+        if (model && model.layoutMode === "ra") {
+            nw = 34;
+        }
         tsld.Layout.prototype.invalidate.call(this);
         this.nodes.invalidate(50 - (nw / 2), 0, nw, 100);
         this.messages.invalidate();

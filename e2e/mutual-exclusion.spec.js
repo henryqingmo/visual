@@ -23,8 +23,10 @@ test.describe("Mutual exclusion visualization", () => {
         await expect(menu.locator('a[href="#central-demo"]')).toBeAttached();
         await expect(menu.locator('a[href="#ring-overview"]')).toBeAttached();
         await expect(menu.locator('a[href="#ring-demo"]')).toBeAttached();
+        await expect(menu.locator('a[href="#ra-overview"]')).toBeAttached();
+        await expect(menu.locator('a[href="#ra-demo"]')).toBeAttached();
         await expect(menu.locator('a[href="#conclusion"]')).toBeAttached();
-        await expect(menu.locator("a")).toHaveCount(6);
+        await expect(menu.locator("a")).toHaveCount(8);
     });
 
     test("mobile menu opens and shows section links", async ({ page }) => {
@@ -73,5 +75,16 @@ test.describe("Mutual exclusion visualization", () => {
         await expect(page.getByRole("heading", { name: /walkthrough/i })).toBeVisible({
             timeout: 20_000,
         });
+    });
+
+    test("Ricart–Agrawala overview loads three peers", async ({ page }) => {
+        await page.goto("/mutual-exclusion/index.html#ra-overview", {
+            waitUntil: "domcontentloaded",
+        });
+
+        await expect(page.getByRole("heading", { name: /ricart/i })).toBeVisible({
+            timeout: 20_000,
+        });
+        await expect(page.locator("#chart svg g.node")).toHaveCount(3, { timeout: 15_000 });
     });
 });
